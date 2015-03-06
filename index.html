@@ -1,0 +1,323 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TouchHighlighter | jQuery highlighter for touchscreen devices</title>
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="js/vendor/modernizr.js"></script>
+  </head>
+  <body>
+    <section class="header">
+      <div class="row">
+        <div class="large-12 columns">
+          <h1>TouchHighlighter.js</h1>
+        </div>
+      </div>
+    </section>
+
+    <div class="row">
+      <div class="large-9 columns">
+        <p>
+          TouchHighlighter is a jQuery plugin for selecting and highlighting text on webpages which supports both touchscreen and mouse-and-keyboard devices.
+        </p>
+      </div>
+      <div class="large-3 columns">
+        <a href="#" class="button round">Download v1.0</a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <h3>
+          The problem
+        </h3>
+        <p>
+          Selecting or highlighting text on touchscreen devices can be cumbersome process. For example, on an iOS device, selecting text involves hovering over an element of text, waiting for the native highlight widget to appear, then dragging the left and right handles to enclose the desired selection. Even then, this selection is inaccessible to any client-side javascript which might want to respond to the selection event.
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-6 columns">
+        <p>
+          This creates a massive difference in UX for users of touchscreen devices, compared to those on mouse-and-keyboard devices. For the certain web applications a simpler method of selecting or highlighting text is desired, and client side applications may require access to the text selected by the user.
+        </p>
+      </div>
+      <div class="large-6 columns">
+        <img class="th" src="img/ios.png">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <h3>
+          The solution
+        </h3>
+        <p>
+          On a touchscreen device, TouchHighlighter responds to <code>touchstart</code> and <code>touchend</code> events, creating Range and Selection objects based on the coordinates of those events.
+        </p>
+        <p>
+          On a mouse-and-keyboard device the Range and Selection objects are created natively by the browser.
+        </p>
+        <p>
+          To maximise cross-browser compatibility, TouchHighlighter uses the <a href="http://code.google.com/p/rangy">Rangy</a> library to provide a standardised Range and Selection API.
+        </p>
+        <p>
+          TouchHighlighter also uses the <a href="http://gilmoreorless.github.io/jquery-nearest/" target="_blank">jQuery Nearest Element</a> plugin to locate the DOM elements relative to the touch coordinates. An optimised approach may be built into future releases of TouchHighlighter.
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <pre>
+<code class="language-html"><div class="code-container"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"js/jquery.min.js"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"js/rangy-core.js"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"js/jquery.nearest.min.js"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"js/touchhighlighter.js"</span>&gt;</span></div></code>
+        </pre>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <h3>
+          Demo examples
+        </h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="panel">
+          <h4>
+            Standard
+          </h4>
+          <div id="example-1" class="example">
+            <p>
+              The text in this box can be selected by dragging your finger - or mouse - over the text you want to highlight. Highlights can be removed by touching - or clicking - anywhere on the highlighted area.
+            </p>
+            <p>
+              While you <i>could</i> attach the TouchHighlighter plugin to the entire body of a webpage, it works best when limited to a specific area on the page where highlighting text is the primary requirement. By default, the plugin prevents touch events from triggering any other actions - but this can also prevent <a href="#" onclick="alert('Oh hai!'); return false;">navigating to links</a> and scrolling. Various work-arounds to these issues are built into TouchHighlighter (see preventDefault and allowVerticalScroll options).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <pre>
+<code class="language-javascript"><div class="code-container"><span class="comment">// attach TouchHighlighter to any page element</span>
+$(<span class="string">'.example'</span>).touchHighlighter();
+
+<span class="comment">// keep track of mousedown targets</span>
+$(<span class="string">'.example'</span>).on(<span class="string">'mousedown'</span>, function(<span class="variable">e</span>) {
+  mousedownTarget = e.originalEvent.target;
+});
+
+<span class="comment">// remove highlights on mouseup or touchend</span>
+$(<span class="string">'.example'</span>).on(<span class="string">'mouseup touchend'</span>, <span class="string">'span.highlighted'</span>, function(<span class="variable">e</span>) {
+  <span class="comment">// ignore mouseup if the previous mousedown target was outside the highlight area</span>
+  if (e.originalEvent.type <span class="symbol">===</span> <span class="string">'mouseup'</span> <span class="symbol">&&</span> e.originalEvent.target <span class="symbol">!==</span> mousedownTarget) return;
+  $(this).closest(<span class="string">'.example'</span>).getHighlighter().removeHighlights(this);
+});</div></code>
+        </pre>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="panel">
+          <a href="#" class="toggle button tiny round right">Highlight on</a>
+          <h4>
+            Toggle
+          </h4>
+          <div id="example-2" class="example">
+            <p>
+              One way of allowing all touch event actions to co-exist is by allowing the user to enable the plugin only when required. The TouchHighlighter attached to this box can be turned on and off. When the TouchHighlighter is enabled, touch events will only trigger highlighting of text. When the TouchHighlighter is disabled, touch events will only trigger the default events, such as <a href="#" onclick="alert('Oh hai!'); return false;">navigating to links</a> and scrolling.
+            </p>
+            <p>
+              Alternatively you can allow the execution of all touch event actions by setting the <code>preventDefault</code> option to <code>false</code>. In that case any and all actions triggered by a touch event will be allowed to execute, but the behaviour can be eratic - for example scrolling resulting in highlighting of text, or highlighting text triggering link navigation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <pre>
+<code class="language-javascript"><div class="code-container"><span class="comment">// toggle highlighter on and off</span>
+$(<span class="string">'.toggle'</span>).on(<span class="string">'click'</span>, function(<span class="variable">e</span>) {
+  <span class="variable">var</span> $this = $(this);
+  if ($this.hasClass(<span class="string">'disabled'</span>)) {
+    $this.closest(<span class="string">'.example'</span>).getHighlighter().enable();
+  } else {
+    $this.closest(<span class="string">'.example'</span>).getHighlighter().disable();
+  }
+  e.preventDefault();
+});</div></code>
+        </pre>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="panel">
+          <h4>
+            Clipboard
+          </h4>
+          <div id="example-3" class="example">
+            <p>
+              A useful feature provided by the native iOS text selection widget is the ability to copy the selection to the clipboard. It is possible to emulate this functionality by combining the TouchHighlighter plugin with other plugins. This example demonstrates the use of TouchHighlighter in combination with <a href="http://zeroclipboard.org/" target="_blank">ZeroClipboard</a> - a neat library for copying text to the clipboard using an invisible Adobe Flash movie and a JavaScript interface. This approach is limited to browsers and platforms which support Adobe Flash.
+            </p>
+          </div>
+          <div id="zeroclipboard-debug" class="error"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <pre>
+<code class="language-javascript"><div class="code-container"><span class="comment">// Initialise ZeroClipboard</span>
+<span class="variable">var</span> client = new ZeroClipboard();
+
+client.on(<span class="string">'wrongflash noflash'</span>, function() {
+  <span class="comment">// No flash</span>
+  ZeroClipboard.destroy();
+});
+
+client.on(<span class="string">'load'</span>, function(<span class="variable">client</span>) {
+  <span class="comment">// Alert on copy</span>
+  client.on('complete', function (<span class="variable">client, args</span>) {
+    alert("Selection copied to clipboard:\n\"" + args.text + "\"");
+  });
+
+  $(<span class="string">'.example'</span>).touchHighlighter({
+    <span class="comment">// Add ZeroClipboard copy button</span>
+    onAfterHighlight: function(<span class="variable">highlights, range</span>) {
+      for (<span class="variable">i</span> in <span class="variable">highlights</span>) {
+        <span class="variable">var</span> text = $(highlights[i]).text();
+        <span class="variable">var</span> button = $('<span class="tag">&lt;<span class="title">button</span> <span class="attribute">class</span>=<span class="value">"copy"</span> <span class="attribute">data-clipboard-text</span>=<span class="value">"</span></span>' + text + '"&gt;<span class="tag">&lt;<span class="title">/button</span>&gt;</span>').insertAfter(highlights[i]);
+        client.clip(button);
+      }
+    },
+    onRemoveHighlight: function(<span class="variable">highlight</span>) {
+      var next = $(highlight).next();
+      if (next.hasClass('copy')) {
+        next.remove();
+      }
+      return true;
+    }
+  });
+});
+</div></code>
+        </pre>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="large-12 columns">
+        <h4>
+          Alternatives
+        </h4>
+        <p>
+          Don't need touchscreen support? The TouchHighlighter plugin was inspired by the <a href="http://mir3z.github.io/jquery.texthighlighter/">jQuery Text Highlighter</a> plugin by mirz. This is an excellent solution for text selection highlighting on mouse-and-keyboard devices.
+        </p>
+      </div>
+    </div>
+    
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/rangy-core.js"></script>
+    <script src="js/jquery.nearest.min.js"></script>
+    <script src="js/ZeroClipboard.js"></script>
+    <script src="js/touchHighlighter.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+    <script>
+      $(document).ready(function() {
+
+        // keep track of mousedown targets
+        var mousedownTarget = '';
+        $('.example').on('mousedown', function(e) {
+          mousedownTarget = e.originalEvent.target;
+        });
+
+        // remove highlights on mouseup or touchend
+        $('.example').on('mouseup touchend', 'span.highlighted', function(e) {
+          if (e.originalEvent.type === 'mouseup' && e.originalEvent.target !== mousedownTarget) return;
+          $(this).closest('.example').getHighlighter().removeHighlights(this);
+        });
+
+        // toggle highlighter on and off
+        $('.toggle').on('click', function(e) {
+          var $this = $(this);
+          if ($this.hasClass('disabled')) {
+            $('#example-2').getHighlighter().enable();
+            $this.removeClass('disabled').text('Highlight on');
+          } else {
+            $('#example-2').getHighlighter().disable();
+            $this.addClass('disabled').text('Highlight off');
+          }
+          e.preventDefault();
+        });
+
+        // example 1
+        $('#example-1').touchHighlighter({
+          color: '#A5CAFE'
+        });
+
+        // example 2
+        $('#example-2').touchHighlighter({
+          color: '#A5CAFE'
+        });
+
+        // ZeroClipboard
+        var client = new ZeroClipboard();
+
+        client.on('wrongflash noflash', function() {
+          $('#zeroclipboard-debug').html('Your browser is missing the Adobe Flash plugin - ZeroClipboard is disabled.');
+          ZeroClipboard.destroy();
+
+          // example 3 - sans ZeroClipboard
+          $('#example-3').touchHighlighter({
+            color: '#A5CAFE'
+          });
+        });
+
+        client.on('load', function(client) {
+          client.on('complete', function (client, args) {
+            alert("Selection copied to clipboard:\n\"" + args.text + "\"");
+          });
+
+          // example 3 - with ZeroClipboard
+          $('#example-3').touchHighlighter({
+            color: '#A5CAFE',
+            onAfterHighlight: function(highlights, range) {
+              for (i in highlights) {
+                var text = $(highlights[i]).text();
+                var button = $('<button class="copy" data-clipboard-text="' + text + '"></button>').insertAfter(highlights[i]);
+                client.clip(button);
+              }
+            },
+            onRemoveHighlight: function(highlight) {
+              var next = $(highlight).next();
+              if (next.hasClass('copy')) {
+                next.remove();
+              }
+              return true;
+            }
+          });
+        });
+
+      });
+    </script>
+  </body>
+</html>
