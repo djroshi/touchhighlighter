@@ -244,19 +244,19 @@ client.on(<span class="string">'load'</span>, function(<span class="variable">cl
     <script>
       $(document).ready(function() {
 
-        // keep track of mousedown targets
+        // Keep track of mousedown targets
         var mousedownTarget = '';
         $('.example').on('mousedown', function(e) {
           mousedownTarget = e.originalEvent.target;
         });
 
-        // remove highlights on mouseup or touchend
+        // Remove highlights on mouseup or touchend
         $('.example').on('mouseup touchend', 'span.highlighted', function(e) {
           if (e.originalEvent.type === 'mouseup' && e.originalEvent.target !== mousedownTarget) return;
           $(this).closest('.example').getHighlighter().removeHighlights(this);
         });
 
-        // toggle highlighter on and off
+        // Toggle highlighter on and off
         $('.toggle').on('click', function(e) {
           var $this = $(this);
           if ($this.hasClass('disabled')) {
@@ -269,12 +269,12 @@ client.on(<span class="string">'load'</span>, function(<span class="variable">cl
           e.preventDefault();
         });
 
-        // example 1
+        // Example 1
         $('#example-1').touchHighlighter({
           color: '#A5CAFE'
         });
 
-        // example 2
+        // Example 2
         $('#example-2').touchHighlighter({
           color: '#A5CAFE'
         });
@@ -286,7 +286,7 @@ client.on(<span class="string">'load'</span>, function(<span class="variable">cl
           $('#zeroclipboard-debug').html('Your browser is missing the Adobe Flash plugin - ZeroClipboard is disabled.');
           ZeroClipboard.destroy();
 
-          // example 3 - sans ZeroClipboard
+          // Example 3 - sans ZeroClipboard
           $('#example-3').touchHighlighter({
             color: '#A5CAFE'
           });
@@ -297,7 +297,7 @@ client.on(<span class="string">'load'</span>, function(<span class="variable">cl
             alert("Selection copied to clipboard:\n\"" + args.text + "\"");
           });
 
-          // example 3 - with ZeroClipboard
+          // Example 3 - with ZeroClipboard
           $('#example-3').touchHighlighter({
             color: '#A5CAFE',
             onAfterHighlight: function(highlights, range) {
